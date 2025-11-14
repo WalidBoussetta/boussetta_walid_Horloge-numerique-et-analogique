@@ -7,6 +7,47 @@
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
 
+    :root{
+      --bg: #0f1724;
+      --card: #0b1220;
+      --accent: #7dd3fc;
+      --muted: #9aa6b2;
+      --glass: rgba(255,255,255,0.04);
+      --hand-width: 3px;
+      --size: 220px; /* base size for a clock */
+      color-scheme: dark;
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+
+    html,body{
+      height:100%;
+      background:linear-gradient(180deg,var(--bg),#041024 80%);
+      color:#e6eef8;
+      overflow-x:hidden;
+    }
+
+    body{
+      display:block;
+      padding:60px 200px 60px;
+    }
+
+    .app{
+      max-width:1100px;
+      width:100%;
+      margin:0 auto;
+      display:flex;
+      flex-direction:column;
+      gap:20px;
+    }
+
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    header h1{font-size:1.15rem;color:var(--accent);margin:0}
+    header p{color:var(--muted);margin:0 0 0 12px;font-size:0.9rem}
+
+    .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+    .controls > *{background:var(--card);padding:10px;border-radius:12px;box-shadow:0 6px 14px rgba(3,7,18,0.6)}
+
+
 
   </style>
 </head>
@@ -48,11 +89,11 @@
 
     <main class="grid" id="clocks"></main>
 
-    <footer style="margin-top:18px;color:var(--muted);font-size:0.9rem">Made with ❤️ — uses <code>Intl.DateTimeFormat</code> for timezone accuracy</footer>
+    <footer style="margin-top:18px;color:var(--muted);font-size:0.9rem">Made with ❤️ —Walid Boussetta MI2A—  using the API <code>Intl.DateTimeFormat</code> for timezone accuracy</footer>
   </div>
 
   <script>
-    
+
 
   </script>
 
