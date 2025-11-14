@@ -143,6 +143,28 @@
 
     //---------------------------------------------------------------------------------
 
+    // Utility: get time parts for a timezone using Intl.formatToParts
+    function getTimePartsForZone(zone, now=new Date()){
+      // Use hour12=false to get 24-hour numeric parts
+      const fmt = new Intl.DateTimeFormat('en-GB',{timeZone: zone, hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false});
+      const parts = fmt.formatToParts(now); //formatToParts traja3lna tableau mta3 objets
+      const map = {};
+      parts.forEach(p=>{ if (p.type !== 'literal') map[p.type] = p.value; });
+      // map = {hour:'14', minute:'05', second:'09'}
+      return {
+        hour: parseInt(map.hour,10), //convertir string to int
+        minute: parseInt(map.minute,10), //10 mean base decimal
+        second: parseInt(map.second,10)
+      };
+    }
+
+
+    //---------------------------------------------------------------------------------
+
+    
+
+
+
   </script>
 
 </body>
