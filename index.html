@@ -107,7 +107,41 @@
   </div>
 
   <script>
+    // fi souret maa saret erreur lel intl 
+    const timeZones = [
+      'UTC','Europe/Paris','Europe/London','America/New_York','America/Los_Angeles','Asia/Tokyo','Asia/Dubai','Australia/Sydney','Africa/Tunis'
+    ];
 
+    const tzSelect = document.getElementById('tzSelect');
+    const addTzBtn = document.getElementById('addTz');
+    const clocksContainer = document.getElementById('clocks');
+    const showAnalog = document.getElementById('showAnalog');
+    const showDigital = document.getElementById('showDigital');
+    const accentPicker = document.getElementById('accentPicker');
+    const hourFormat = document.getElementById('hourFormat');
+    const localNow = document.getElementById('localNow');
+
+    
+    //take the api from the intl susing the function populate timezones
+    function populateTZs(){
+      let zones = [];
+      // objet global intl (nrml ykun dima mawjoud fel nav moderne)
+      if (Intl && typeof Intl.supportedValuesOf === 'function'){
+        try{ zones = Intl.supportedValuesOf('timeZone'); } //api
+        catch(e){ zones = timeZones; }  // fallback if they throw an error
+      } else {
+        zones = timeZones;
+      }
+
+      //on vide le contenu precedent du selecteur
+      tzSelect.innerHTML='';
+      zones.forEach(z=>{
+        const opt = document.createElement('option'); opt.value = z; opt.textContent = z; tzSelect.appendChild(opt);
+      });
+    }
+    populateTZs(); 
+
+    //---------------------------------------------------------------------------------
 
   </script>
 
