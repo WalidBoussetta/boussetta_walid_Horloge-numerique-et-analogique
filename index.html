@@ -44,9 +44,66 @@
     header h1{font-size:1.15rem;color:var(--accent);margin:0}
     header p{color:var(--muted);margin:0 0 0 12px;font-size:0.9rem}
 
-    .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+    .controls{
+        display:flex;
+        gap:10px;
+        flex-wrap:wrap;
+        align-items:center;
+        margin-bottom:18px
+    }
     .controls > *{background:var(--card);padding:10px;border-radius:12px;box-shadow:0 6px 14px rgba(3,7,18,0.6)}
 
+
+    .select, .btn, .toggle, .color{display:inline-flex;align-items:center;gap:8px}
+    
+    select,input[type="text"]{
+        background:transparent;
+        border:1px solid rgba(255,255,255,0.04);
+        color:#e6eef8;
+        padding:8px;
+        border-radius:8px
+    }
+    
+    .btn{cursor:pointer;padding:8px 12px;color:var(--accent);border-radius:10px}
+
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+
+    .clock-card{
+        background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;
+        padding:16px;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:12px;
+        min-height:220px
+    }
+
+    .tz-name{font-weight:600;color:#dbeafe}
+    .meta{color:var(--muted);font-size:0.85rem}
+
+    /* Analog clock */
+    .clock{
+      width:var(--size);height:var(--size);border-radius:50%;background:var(--glass);display:grid;place-items:center;position:relative;box-shadow:inset 0 8px 40px rgba(0,0,0,0.6), 0 8px 30px rgba(2,6,23,0.6);
+      border:1px solid rgba(255,255,255,0.03);
+    }
+
+    .face{position:relative;width:92%;height:92%;border-radius:50%;display:block}
+    
+    .tick{position:absolute;left:50%;top:6%;transform-origin:50% 100%;width:2px;height:12%;background:linear-gradient(#fff0,#fff1);opacity:0.9}
+    .tick[data-small]{height:8%;opacity:0.45}
+
+    /* Hands */
+    .hand{position:absolute;left:50%;top:50%;transform-origin:50% 100%;transition:transform 0.5s cubic-bezier(.4,2,.2,1);}
+    .hand .bar{position:absolute;left:50%;top:0;transform:translateX(-50%);border-radius:3px}
+
+    .hour{width:6px;height:35%;}
+    .minute{width:4px;height:45%;}
+    .second{width:2px;height:48%;background:var(--accent);}
+
+    .hand .cap{position:absolute;width:12px;height:12px;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--accent);box-shadow:0 0 12px rgba(125,211,252,0.18)}
+
+    /* Digital */
+    .digital{font-variant-numeric:tabular-nums;font-size:1.25rem;color:#e6eef8;background:transparent;border-radius:8px;padding:6px 10px}
 
 
     /* small screens */
@@ -161,7 +218,67 @@
 
     //---------------------------------------------------------------------------------
 
-    
+    // Create a clock card for a timezone
+    function createClockCard(zone){
+      const card = document.createElement('section'); card.className='clock-card';
+      const title = document.createElement('div'); title.className='tz-name'; title.textContent = zone;
+      const meta = document.createElement('div'); meta.className='meta'; meta.textContent = zone.replace('_',' ');
+
+      // contenu horloge
+      const clockWrap = document.createElement('div'); clockWrap.style.display='flex'; clockWrap.style.flexDirection='column'; clockWrap.style.alignItems='center';
+      
+      
+      // analog clock
+      const analog = document.createElement('div'); analog.className='clock'; analog.setAttribute('data-zone',zone);
+      //le cadron avec les ticks
+      const face = document.createElement('div'); face.className='face';
+
+      // bch n3ml des traits autour du cadron de l'horloge
+      // les grand ticks toute les (5 minutes) w les petits ticks pour les minutes
+      // cardron avec 60 ticks
+      for (let i=0;i<60;i++){
+        const t = document.createElement('div'); t.className='tick';
+        if (i%5 !== 0) t.setAttribute('data-small','1');
+        t.style.transform = `translateX(-50%) rotate(${i*6}deg)`;
+        face.appendChild(t);
+      }
+
+      // hands
+      const hour = document.createElement('div'); hour.className='hand hour'; hour.innerHTML='<div class="bar" style="width:6px;height:100%;background:linear-gradient(#fff,#fff);transform:translateX(-50%)"></div>';
+      const minute = document.createElement('div'); minute.className='hand minute'; minute.innerHTML='<div class="bar" style="width:4px;height:100%;background:linear-gradient(#fff,#ddd);transform:translateX(-50%)"></div>';
+      const second = document.createElement('div'); second.className='hand second'; second.innerHTML='<div class="bar" style="width:2px;height:100%;transform:translateX(-50%)"></div><div class="cap"></div>';
+      // aiguille de secondes a un petit cap au centre
+
+
+      analog.appendChild(face);
+      analog.appendChild(hour); analog.appendChild(minute); analog.appendChild(second);
+
+      const digital = document.createElement('div'); digital.className='digital'; digital.textContent='--:--:--';
+
+      const actions = document.createElement('div'); actions.style.display='flex'; actions.style.gap='8px'; actions.style.marginTop='6px';
+      // supprimer bouton
+      const remove = document.createElement('button'); remove.className='btn'; remove.textContent='Supprimer'; remove.onclick = ()=>{ card.remove(); }
+      actions.appendChild(remove);
+
+      clockWrap.appendChild(analog); if (showDigital.checked) clockWrap.appendChild(digital);
+
+      card.appendChild(title); card.appendChild(meta); card.appendChild(clockWrap); card.appendChild(actions);
+
+      // stockage des rederences aux éléments pour mise à jour
+      const clockObj = {zone, card, analog, hourEl:hour, minuteEl:minute, secondEl:second, digitalEl:digital, wrap:clockWrap};
+
+      // set initial visibility
+      analog.style.display = showAnalog.checked ? 'grid' : 'none';
+      digital.style.display = showDigital.checked ? 'block' : 'none';
+
+      // ajout au DOM
+      clocksContainer.appendChild(card);
+      return clockObj;
+    }
+
+    //---------------------------------------------------------------------------------
+
+
 
 
 
