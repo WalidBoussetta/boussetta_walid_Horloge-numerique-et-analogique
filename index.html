@@ -278,6 +278,63 @@
 
     //---------------------------------------------------------------------------------
 
+    
+    // Maintain list of clocks
+    const clocks = []; //bch nst3mlha f update
+
+    function addZone(zone){
+      try{
+        // Validate by creating a formatter
+        new Intl.DateTimeFormat('en-US',{timeZone:zone});
+      }catch(e){ return; }
+      
+      const already = clocks.find(c=>c.zone===zone); if (already) { alert('Fuseau déjà présent'); return; }
+      const c = createClockCard(zone); clocks.push(c);
+      updateOnceForClock(c);
+    }
+
+    // update function: updates DOM for each clock pour un instant précis
+    function updateOnceForClock(c, now=new Date()){
+      const parts = getTimePartsForZone(c.zone, now);
+      const hr = parts.hour % 12; //parts objet {hour,minute,second}
+      const min = parts.minute;
+      const sec = parts.second;
+
+      // degrees
+      const secDeg = sec * 6; // 360/60
+      const minDeg = (min + sec/60) * 6;
+      const hrDeg = (hr + min/60 + sec/3600) * 30; // 360/12
+      
+      if (secDeg === 0){
+        // avoid transition jump when second hand resets
+        c.secondEl.style.transition = 'none';
+        requestAnimationFrame(()=>{ c.secondEl.style.transition = 'transform 0s linear'; });
+      }
+
+      c.hourEl.style.transform = `translate(-50%, -100%) rotate(${hrDeg}deg)`;
+      c.minuteEl.style.transform = `translate(-50%, -100%) rotate(${minDeg}deg)`;
+      c.secondEl.style.transform = `translate(-50%, -100%) rotate(${secDeg}deg)`;
+
+      // digital
+      const hourDisplay = (hourFormat.value === '12') ? ((parts.hour%12)||12) : parts.hour;
+      const hh = String(hourDisplay).padStart(2,'0');  //ajouter 0 si chiffre <10 (ex: 9 -> 09)
+      const mm = String(min).padStart(2,'0'); //2 hiya el length eli n7eb 3liha el string
+      const ss = String(sec).padStart(2,'0');
+      c.digitalEl.textContent = `${hh}:${mm}:${ss}`;
+    }
+
+
+    // Update all ( we'll update at 200ms for fluid second-hand ) 
+    function tick(){
+      const now = new Date(); //pour avoir une synchronisation entre les horloges
+      // Update local display
+      localNow.textContent = now.toLocaleTimeString();
+
+      clocks.forEach(c=> updateOnceForClock(c, now));
+    }
+    //---------------------------------------------------------------------------------
+
+
 
 
 
