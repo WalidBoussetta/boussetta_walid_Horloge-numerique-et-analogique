@@ -357,7 +357,68 @@
 
     //---------------------------------------------------------------------------------
 
+    // add a default local clock 
+    addZone('local');
+    (function addDefaults(){
+      const localCard = createClockCard('local');
+      clocks.push(localCard);
+      updateOnceForClockLocal(localCard);
 
+      ['Europe/Paris','America/New_York','Asia/Tokyo'].forEach(z=>{ addZone(z); });
+    })();
+
+    // Special update for local
+    function getTimePartsLocal(now=new Date()){
+      return {hour: now.getHours(), minute: now.getMinutes(), second: now.getSeconds()};
+    }
+    //fonction bch traja3l el wa9t local
+
+    
+    // update function for local clock
+    function updateOnceForClockLocal(c, now=new Date()){
+      const parts = getTimePartsLocal(now);
+      const hr = parts.hour % 12;
+      const min = parts.minute;
+      const sec = parts.second;
+      const secDeg = sec * 6;
+      const minDeg = (min + sec/60) * 6;
+      const hrDeg = (hr + min/60 + sec/3600) * 30;
+
+        if (secDeg === 0){
+            c.secondEl.style.transition = 'none';
+            requestAnimationFrame(()=>{ c.secondEl.style.transition = 'transform 0s linear'; });
+        }
+      c.hourEl.style.transform = `translate(-50%, -100%) rotate(${hrDeg}deg)`;
+      c.minuteEl.style.transform = `translate(-50%, -100%) rotate(${minDeg}deg)`;
+      c.secondEl.style.transform = `translate(-50%, -100%) rotate(${secDeg}deg)`;
+      const hourDisplay = (hourFormat.value === '12') ? ((parts.hour%12)||12) : parts.hour;
+      const hh = String(hourDisplay).padStart(2,'0');
+      const mm = String(min).padStart(2,'0');
+      const ss = String(sec).padStart(2,'0');
+      c.digitalEl.textContent = `${hh}:${mm}:${ss}`;
+    }
+
+    // Replace generic update for 'local' zone
+    function tickWrap(){
+      const now = new Date(); localNow.textContent = now.toLocaleTimeString();
+      clocks.forEach(c=>{
+        if (c.zone === 'local') updateOnceForClockLocal(c, now);
+        else updateOnceForClock(c, now);
+      });
+    }
+
+    // Start ticking: update frequently for smooth second hand
+    setInterval(tickWrap, 200);
+
+    // Small accessibility: pressing enter in select triggers add
+    tzSelect.addEventListener('keydown', (e)=>{ if (e.key === 'Enter') addTzBtn.click(); });
+
+    // responsive: adjust --size based on computed card width
+    function adjustSize(){
+      const cw = Math.min(260, Math.max(140, Math.floor(window.innerWidth/6)));
+      document.documentElement.style.setProperty('--size', cw + 'px');
+    }
+    window.addEventListener('resize', adjustSize); adjustSize();
 
 
 
