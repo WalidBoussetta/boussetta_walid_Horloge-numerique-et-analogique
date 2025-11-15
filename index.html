@@ -334,6 +334,29 @@
     }
     //---------------------------------------------------------------------------------
 
+    // Event listeners
+    addTzBtn.addEventListener('click', ()=>{
+      const val = tzSelect.value.trim(); if (!val) return; // trim to escape spaces
+      addZone(val);
+    });
+
+    showAnalog.addEventListener('change', ()=>{
+      clocks.forEach(c=> c.analog.style.display = showAnalog.checked ? 'grid' : 'none');
+    });
+
+    showDigital.addEventListener('change', ()=>{
+      clocks.forEach(c=> c.digitalEl.style.display = showDigital.checked ? 'block' : 'none');
+    });
+
+    // Accent color change
+    accentPicker.addEventListener('input', (e)=>{
+      document.documentElement.style.setProperty('--accent', e.target.value);
+    });
+
+    hourFormat.addEventListener('change', ()=>{ tick(); });
+
+    //---------------------------------------------------------------------------------
+
 
 
 
