@@ -19,9 +19,19 @@
       font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     }
 
+    /* Light mode values */
+    .light-mode {
+    --bg: #e8ecf2;
+    --card: white;
+    --accent: #2563eb;
+    --muted: #444a55;
+    --glass: rgba(0,0,0,0.05);
+    color-scheme: light;
+    }
+
     html,body{
       height:100%;
-      background:linear-gradient(180deg,var(--bg),#041024 80%);
+      background:linear-gradient(180deg,var(--bg),#041024 100%);
       color:#e6eef8;
       overflow-x:hidden;
     }
@@ -59,10 +69,12 @@
     select,input[type="text"]{
         background:transparent;
         border:1px solid rgba(255,255,255,0.04);
-        color:#e6eef8;
+        color:#f9f5f5;
         padding:8px;
         border-radius:8px
     }
+    select option{background:var(--card);color:#e6eef8}  
+    
     
     .btn{cursor:pointer;padding:8px 12px;color:var(--accent);border-radius:10px}
 
@@ -119,6 +131,34 @@
     input[type=color]{border-radius:6px;border:0;padding:4px}
 
 
+    
+    .night-btn {
+    position: fixed;
+    right: 20px;           
+    bottom: 20px;          
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;    
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: background 0.3s, transform 0.2s;
+    z-index: 9999;   
+    margin:10px 10px 0 0; 
+    padding-bottom:5px ;     
+    }
+
+    .night-btn:hover {
+    transform: scale(1.1);
+    filter: brightness(0.85); /* darken dynamically instead of fixed color */
+    }
+
+
+
+
+
 
   </style>
 </head>
@@ -159,6 +199,10 @@
     </div>
 
     <main class="grid" id="clocks"></main>
+
+    <button id="nightModeBtn" class="night-btn">🌙</button>
+
+
 
     <footer style="margin-top:18px;color:var(--muted);font-size:0.9rem">Made with ❤️ —Walid Boussetta MI2A—  using the API <code>Intl.DateTimeFormat</code> for timezone accuracy</footer>
   </div>
@@ -419,6 +463,31 @@
       document.documentElement.style.setProperty('--size', cw + 'px');
     }
     window.addEventListener('resize', adjustSize); adjustSize();
+
+
+    const nightBtn = document.getElementById("nightModeBtn");
+    let nightMode = true;
+
+    function updateNightMode() {
+    if (nightMode) {
+        document.body.classList.remove("light-mode");
+        nightBtn.textContent = "🌙";
+    } else {
+        document.body.classList.add("light-mode");
+        nightBtn.textContent = "☀️";
+        
+    }
+    }
+
+    nightBtn.addEventListener("click", () => {
+    nightMode = !nightMode;
+    updateNightMode();
+    });
+
+    // Initialize
+    updateNightMode();
+
+
 
 
 
