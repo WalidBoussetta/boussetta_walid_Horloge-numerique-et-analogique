@@ -1,12 +1,4 @@
-<!doctype html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Horloge combinée — Analogique + Numérique</title>
-  <style>
-    
-    *{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0}
 
     :root{
       --bg: #0f1724;
@@ -155,60 +147,3 @@
     transform: scale(1.1);
     filter: brightness(0.85); /* darken dynamically instead of fixed color */
     }
-
-
-
-
-
-
-  </style>
-</head>
-<body>
-    <div class="app">
-    
-    <header>
-      <div style="display:flex;align-items:center;gap:12px">
-        <h1>Horloge combinée</h1>
-        <p class="small-muted">Analogique + Numérique — Multi-fuseaux, personnalisable, responsive</p>
-      </div>
-      <div class="small-muted">Temps local: <span id="localNow">--:--:--</span></div>
-    </header>
-
-    <div class="controls" id="controls">
-      <div class="select">
-        <label for="tzSelect" class="small-muted">Ajouter fuseau</label>
-        <select id="tzSelect" title="Choisir un fuseau horaire"></select>
-        <button class="btn" id="addTz">+ Ajouter</button>
-      </div>
-
-      <div class="toggle">
-        <label class="small-muted">Afficher</label>
-        <label class="small-muted" style="margin-left:8px"><input type="checkbox" id="showAnalog" checked> Analog</label>
-        <label class="small-muted" style="margin-left:8px"><input type="checkbox" id="showDigital" checked> Numérique</label>
-      </div>
-
-      <div class="color">
-        <label class="small-muted">Couleur</label>
-        <input type="color" id="accentPicker" value="#7dd3fc" title="Accent color">
-      </div>
-
-      <div class="select">
-        <label class="small-muted">Format</label>
-        <select id="hourFormat"><option value="24">24h</option><option value="12">12h</option></select>
-      </div>
-
-    </div>
-
-    <main class="grid" id="clocks"></main>
-
-    <button id="nightModeBtn" class="night-btn">🌙</button>
-
-
-
-    <footer style="margin-top:18px;color:var(--muted);font-size:0.9rem">Made with ❤️ —Walid Boussetta MI2A—  using the API <code>Intl.DateTimeFormat</code> for timezone accuracy</footer>
-  </div>
-
-  <script src="scripts.js"></script>
-  
-
-</body>
