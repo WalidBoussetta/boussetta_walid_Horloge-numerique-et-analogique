@@ -198,7 +198,7 @@
       clocks.push(localCard);
       updateOnceForClockLocal(localCard);
 
-      ['Europe/Paris','America/New_York','Asia/Tokyo'].forEach(z=>{ addZone(z); });
+      ['Europe/Paris','America/New_York'].forEach(z=>{ addZone(z); });
     })();
 
     // Special update for local
@@ -255,24 +255,3 @@
     window.addEventListener('resize', adjustSize); adjustSize();
 
 
-    const nightBtn = document.getElementById("nightModeBtn");
-    let nightMode = true;
-
-    function updateNightMode() {
-    if (nightMode) {
-        document.body.classList.remove("light-mode");
-        nightBtn.textContent = "🌙";
-    } else {
-        document.body.classList.add("light-mode");
-        nightBtn.textContent = "☀️";
-        
-    }
-    }
-
-    nightBtn.addEventListener("click", () => {
-    nightMode = !nightMode;
-    updateNightMode();
-    });
-
-    // Initialize
-    updateNightMode();
