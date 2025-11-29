@@ -12,16 +12,6 @@
       font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     }
 
-    /* Light mode values */
-    .light-mode {
-    --bg: #e8ecf2;
-    --card: white;
-    --accent: #2563eb;
-    --muted: #444a55;
-    --glass: rgba(0,0,0,0.05);
-    color-scheme: light;
-    }
-
     html,body{
       height:100%;
       background:linear-gradient(180deg,var(--bg),#041024 100%);
@@ -31,7 +21,7 @@
 
     body{
       display:block;
-      padding:60px 200px 60px;
+      padding:40px 200px 40px;
     }
 
     .app{
@@ -43,7 +33,7 @@
       gap:20px;
     }
 
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
     header h1{font-size:1.15rem;color:var(--accent);margin:0}
     header p{color:var(--muted);margin:0 0 0 12px;font-size:0.9rem}
 
@@ -124,4 +114,3 @@
     input[type=color]{border-radius:6px;border:0;padding:4px}
     input[type=color]::-webkit-color-swatch-wrapper{padding:0}
     input[type=color]::-webkit-color-swatch{border-radius:6px;border:0}
-    
